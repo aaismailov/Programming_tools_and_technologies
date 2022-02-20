@@ -8,14 +8,10 @@ using namespace std;
 template <typename T>
 void output_vector(std::vector<T> v, std::string str)
 {
-    typename std::vector<T>::iterator iter = v.begin();
-
     std::cout << str;
-    while (iter != v.end())
-    {
-        std::cout << *iter << " ";
-        iter++;
-    }
+    for_each(v.begin(), v.end(), [](std::string s){
+        std::cout << s << " ";
+    });
     std::cout << "\n";
 }
 
@@ -30,6 +26,7 @@ std::vector<std::string> input_vector()
 
     if (num > 0) {
         std::cout << "Strings:\n";
+
         for (int i = 0; i < num; i++)
         {
             std::cin >> str;
@@ -37,7 +34,7 @@ std::vector<std::string> input_vector()
         }
     } else {
         std::cout << "Okay, let's use the default strings!\n";
-        v = {"asA321op", "Pas2reas", "1Tutu", "1YYAreasasas3", "lI2dj4ea5s", "e56d7xhrasas", "Jd89Aj"};
+        v = { "asA321op", "Pas2reas", "1Tutu", "1YYAreasasas3", "lI2dj4ea5s", "e56d7xhrasas", "Jd89Aj" };
     }
 
     output_vector(v, "\nBefore: ");
@@ -46,15 +43,12 @@ std::vector<std::string> input_vector()
 
 std::vector<std::string> erase_digits(std::vector<std::string> v)
 {
-    std::vector<std::string>::iterator iter = v.begin();
-
-    while (iter != v.end()) {
-        std::string::iterator chit = std::remove_if((*iter).begin(), (*iter).end(), ::isdigit);
-        auto new_size = std::distance(chit, (*iter).end());
-        (*iter).erase(chit, (*iter).end());
-        (*iter).append(new_size, '+');
-        iter++;
-    }
+    for_each(v.begin(), v.end(), [](std::string &s){
+        std::string::iterator chit = std::remove_if(s.begin(), s.end(), []( int x ) { return ::isdigit(x); });
+        auto new_size = std::distance(chit, s.end());
+        s.erase(chit, s.end());
+        s.append(new_size, '+');
+    });
 
     output_vector(v, " After: ");
     return (v);

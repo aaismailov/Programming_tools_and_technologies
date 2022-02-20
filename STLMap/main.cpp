@@ -1,6 +1,7 @@
 # include <iostream>
 # include <string>
 # include <map>
+# include <algorithm>
 
 int main ()
 {
@@ -16,22 +17,22 @@ int main ()
     {
         std::cin >> student[0] >> student[1] >> exam_scores[0] >> exam_scores[1] >> exam_scores[2];
         int aver_score = (exam_scores[0] + exam_scores[1] + exam_scores[2])/3;
+        auto name = []( std::string a, std::string b ) { return a + ' ' + b; };
         if (aver_score > 0)
         {
             if (aver_score < min) {
                 result = {};
-                result[student[0] + ' ' + student[1]] = aver_score;
+                result[name(student[0], student[1])] = aver_score;
                 min = aver_score;
             }
             else if (aver_score == min) {
-                result[student[0] + ' ' + student[1]] = aver_score;
+                result[name(student[0], student[1])] = aver_score;
             }
         }
     }
     std::cout << "\n";
-    for (std::map<std::string, int>::iterator it = result.begin(); it != result.end(); ++it)
-    {
-        std::cout << it->first << " " << it->second << "\n";
-    }
+    for_each(result.begin(), result.end(), [](std::pair<std::string, int> iter){
+        std::cout << iter.first << " " << iter.second << "\n";
+    });
     return (0);
 }
